@@ -20,3 +20,14 @@ let vipCondition customer = customer.IsVip
 let increaseCreditUsingVip = increaseCredit vipCondition
 
 let upgradeCustomer = getSpendings >> tryPromoteToVip >> increaseCreditUsingVip
+
+let isAdult customer = 
+    match customer.PersonalDetails with
+    | None -> false
+    | Some pd -> pd.DateOfBirth.AddYears 18 <= DateTime.Today
+
+let getAlert customer =
+    match customer.Notifications with
+    | ReceiveNotifications(receiveDeals = _; receiveAlerts = true) ->
+        Some(sprintf "Alert for customer: %i" customer.Id)
+    | _ -> None
